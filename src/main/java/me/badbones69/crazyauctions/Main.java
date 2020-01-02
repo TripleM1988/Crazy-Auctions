@@ -3,13 +3,16 @@ package me.badbones69.crazyauctions;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
+import me.badbones69.crazyauctions.command.SpawnCommand;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.controllers.Metrics;
 import me.badbones69.crazyauctions.currency.Vault;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,13 +24,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class Main extends JavaPlugin implements Listener {
 	
 	public static FileManager fileManager = FileManager.getInstance();
 	public static CrazyAuctions crazyAuctions = CrazyAuctions.getInstance();
-	
+	public static Main mainInstance = null;
+
 	@Override
 	public void onEnable() {
 		fileManager.logInfo(true).setup(this);
@@ -40,7 +45,11 @@ public class Main extends JavaPlugin implements Listener {
 			saveDefaultConfig();
 		}
 		Messages.addMissingMessages();
+
 		new Metrics(this); //Starts up bStats
+		this.getCommand("caSpawn").setExecutor(new SpawnCommand(this));
+		this.getServer().getPluginManager().registerEvents(new VillagerAuction(this), this);
+		mainInstance = this;
 	}
 	
 	@Override
@@ -318,7 +327,11 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}.runTaskLater(this, 40);
 	}
-	
+
+	public static Main getMainInstance() {
+		return mainInstance;
+	}
+
 	private void startCheck() {
 		new BukkitRunnable() {
 			@Override

@@ -1,5 +1,6 @@
 package me.badbones69.crazyauctions.controllers;
 
+import me.badbones69.crazyauctions.Main;
 import me.badbones69.crazyauctions.Methods;
 import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
@@ -7,16 +8,16 @@ import me.badbones69.crazyauctions.api.enums.CancelledReason;
 import me.badbones69.crazyauctions.api.events.AuctionBuyEvent;
 import me.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
+import me.badbones69.crazyauctions.converstion.ConversationHelper;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.block.Container;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -484,6 +485,7 @@ public class GUI implements Listener {
 		if(inv != null) {
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Categories")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -509,6 +511,7 @@ public class GUI implements Listener {
 			}
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -542,7 +545,7 @@ public class GUI implements Listener {
 									player.sendMessage(Messages.BID_MESSAGE.getMessage(placeholders));
 									Files.DATA.saveFile();
 									bidding.put(player, 0);
-									player.closeInventory();
+									closeInv(player);
 									playClick(player);
 									return;
 								}
@@ -564,7 +567,7 @@ public class GUI implements Listener {
 											playClick(player);
 											return;
 										}catch(Exception ex) {
-											player.closeInventory();
+											closeInv(player);
 											player.sendMessage(Messages.ITEM_DOESNT_EXIST.getMessage());
 											return;
 										}
@@ -577,6 +580,7 @@ public class GUI implements Listener {
 			}
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.GUIName")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				final int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -603,6 +607,13 @@ public class GUI implements Listener {
 									int page = Integer.parseInt(e.getView().getTitle().split("#")[1]);
 									openShop(player, shopType.get(player), shopCategory.get(player), page);
 									playClick(player);
+									return;
+								}
+								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.WhatIsThis.SellingShop.Name")))) {
+									System.out.println("Clicked the book!");
+									playClick(player);
+									ConversationHelper.startConversation(player, Main.getMainInstance());
+									closeInv(player);
 									return;
 								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
@@ -747,6 +758,7 @@ public class GUI implements Listener {
 			}
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -765,13 +777,13 @@ public class GUI implements Listener {
 									}
 									if(Methods.isInvFull(player)) {
 										playClick(player);
-										player.closeInventory();
+										closeInv(player);
 										player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 										return;
 									}
 									if(CurrencyManager.getMoney(player) < cost) {
 										playClick(player);
-										player.closeInventory();
+										closeInv(player);
 										HashMap<String, String> placeholders = new HashMap<>();
 										placeholders.put("%Money_Needed%", (cost - CurrencyManager.getMoney(player)) + "");
 										placeholders.put("%money_needed%", (cost - CurrencyManager.getMoney(player)) + "");
@@ -811,6 +823,7 @@ public class GUI implements Listener {
 			}
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -862,6 +875,7 @@ public class GUI implements Listener {
 			}
 			if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
 				e.setCancelled(true);
+				player.updateInventory();
 				final int slot = e.getRawSlot();
 				if(slot <= inv.getSize()) {
 					if(e.getCurrentItem() != null) {
@@ -949,5 +963,65 @@ public class GUI implements Listener {
 			}
 		}
 	}
-	
+
+	@EventHandler
+	public void onInvDrag(InventoryDragEvent e) {
+		FileConfiguration config = Files.CONFIG.getFile();
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Categories")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.GUIName")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		if(e.getView().getTitle().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
+			e.setCancelled(true);
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+	}
+
+	@EventHandler
+	public void onInvMoveItem(InventoryMoveItemEvent e) {
+		FileConfiguration config = Files.CONFIG.getFile();
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.Categories")))) {
+			e.setCancelled(true);
+		}
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.Bidding-On-Item")))) {
+			e.setCancelled(true);
+		}
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.GUIName")))) {
+			e.setCancelled(true);
+		}
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.Buying-Item")))) {
+			e.setCancelled(true);
+		}
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.Players-Current-Items")))) {
+			e.setCancelled(true);
+		}
+		if(((Container)e.getSource().getHolder()).getCustomName().contains(Methods.color(config.getString("Settings.Cancelled/Expired-Items")))) {
+			e.setCancelled(true);
+		}
+	}
+
+	private void closeInv(Player player) {
+		Bukkit.getScheduler().runTask(Main.getMainInstance(), new Runnable() {
+			@Override
+			public void run() {
+				player.closeInventory();
+			}
+		});
+	}
 }
