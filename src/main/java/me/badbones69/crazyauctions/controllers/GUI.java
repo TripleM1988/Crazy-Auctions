@@ -10,6 +10,7 @@ import me.badbones69.crazyauctions.api.events.AuctionCancelledEvent;
 import me.badbones69.crazyauctions.api.events.AuctionNewBidEvent;
 import me.badbones69.crazyauctions.converstion.ConversationHelper;
 import me.badbones69.crazyauctions.currency.CurrencyManager;
+import me.badbones69.crazyauctions.currency.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Container;
@@ -540,6 +541,11 @@ public class GUI implements Listener {
 										return;
 									}
 									Bukkit.getPluginManager().callEvent(new AuctionNewBidEvent(player, data.getItemStack("Items." + ID + ".Item"), bid));
+									// TripleM1988: Remove money on bidding to prevent spending it elsewhere in the meantime - pay last-bidders money back!
+									CurrencyManager.removeMoney(player, new Long(bid));
+									if(!topBidder.equalsIgnoreCase("None")) {
+										CurrencyManager.addMoney(Methods.getOfflinePlayer(topBidder), data.getLong("Items." + ID + ".Price"));
+									}
 									data.set("Items." + ID + ".Price", bid);
 									data.set("Items." + ID + ".TopBidder", player.getName());
 									HashMap<String, String> placeholders = new HashMap<>();

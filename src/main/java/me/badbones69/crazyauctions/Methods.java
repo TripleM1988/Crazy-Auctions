@@ -386,7 +386,8 @@ public class Methods {
 						String seller = data.getString("Items." + i + ".Seller");
 						Long price = data.getLong("Items." + i + ".Price");
 						CurrencyManager.addMoney(getOfflinePlayer(seller), price);
-						CurrencyManager.removeMoney(getOfflinePlayer(winner), price);
+						// TripleM1988: as we already removed the money from the winner on bidding we don't need this here!
+//						CurrencyManager.removeMoney(getOfflinePlayer(winner), price);
 						HashMap<String, String> placeholders = new HashMap<>();
 						placeholders.put("%Price%", getPrice(i, false));
 						placeholders.put("%price%", getPrice(i, false));
