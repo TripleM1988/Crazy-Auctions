@@ -22,7 +22,7 @@ public class TypePrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return "Auktion (bid) oder Sofort-Kaufen (sell)?";  //TODO: move to messages
+        return Messages.TYPE_PROMPT_MESSAGE.getMessage();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class TypePrompt extends StringPrompt {
             } else if (message.equals("sell")) {
                 prep.Type = "Sell";
             } else if (message.equals("cancel")) {
-                player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                player.sendRawMessage(Messages.AUCTION_CREATE_CANCEL.getMessage());
                 prep.ItemToSell.setAmount((int)prep.Amount);
                 player.getInventory().addItem(prep.ItemToSell);
                 return null;

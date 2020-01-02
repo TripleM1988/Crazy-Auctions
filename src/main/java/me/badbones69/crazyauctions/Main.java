@@ -324,7 +324,7 @@ public class Main extends JavaPlugin implements Listener {
 			@Override
 			public void run() {
 				if(player.getName().equals("BadBones69")) {
-					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
+					player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running a fork by TripleM1988 of your Crazy Auctions Plugin. " + "&7It is running version &av" + Bukkit.getServer().getPluginManager().getPlugin("CrazyAuctions").getDescription().getVersion() + "&7."));
 				}
 			}
 		}.runTaskLater(this, 40);

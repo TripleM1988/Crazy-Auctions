@@ -9,7 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public enum Messages {
-	
+
+	TYPE_PROMPT_MESSAGE("TypePromptMessage", "&f&lFor auction type &2bid &f&l, for selling type &2sell &f&l, to cancel type &2cancel &f&l:"),
+	PRICE_PROMPT_MESSAGE("PricePromptMessage","&f&lPlease type the (starting-)price for the item:"),
+	START_AUCTION_PROMPT_MESSAGE("StartAuctionPromptMessage", "&f&lAre you sure you want to create the following: &b%auctiontype% &f&lof &b%auctionamount% %auctionitem% &f&lfor a price of &b%auctionprice%&f&l? Type &2yes &f&lto start or &2cancel &f&lto cancel."),
+	AUCTION_CREATE_CANCEL("AuctionCreateCancel", "&eCancled creation!"),
 	PLAYERS_ONLY("Players-Only", "&cOnly players can use this command."),
 	RELOAD("Reload", "&7You have just reloaded the Crazy Auctions Files."),
 	NEED_MORE_MONEY("Need-More-Money", "&cYou are in need of &a$%money_needed%&c."),

@@ -36,7 +36,17 @@ public class StartAuctionPrompt extends StringPrompt {
         else {
             nameOfItem = prep.ItemToSell.getType().name();
         }
-        return "§2Are you sure you want to create the following: " + prep.Type + " of " + prep.Amount + " " + nameOfItem + " for a price of " + prep.Price + "? Type YES to start or CANCEL to cancel.";
+        HashMap<String, String> placeholders = new HashMap<>();
+        placeholders.put("%auctiontype%", prep.Type);
+        placeholders.put("%Auctiontype%", prep.Type);
+        placeholders.put("%auctionitem%", nameOfItem);
+        placeholders.put("%Auctionitem%", nameOfItem);
+        placeholders.put("%auctionamount%", prep.Amount.toString());
+        placeholders.put("%Auctionamount%", prep.Amount.toString());
+        placeholders.put("%auctionprice%", prep.Price.toString());
+        placeholders.put("%Auctionprice%", prep.Price.toString());
+        return Messages.START_AUCTION_PROMPT_MESSAGE.getMessage(placeholders);
+//        return "§2Are you sure you want to create the following: " + prep.Type + " of " + prep.Amount + " " + nameOfItem + " for a price of " + prep.Price + "? Type YES to start or CANCEL to cancel.";
     }
 
     @Override
@@ -44,7 +54,7 @@ public class StartAuctionPrompt extends StringPrompt {
         if (conversationContext.getForWhom() instanceof Player) {
             Player player = (Player) conversationContext.getForWhom();
             if (message.equalsIgnoreCase("cancel")) {
-                player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                player.sendRawMessage(Messages.AUCTION_CREATE_CANCEL.getMessage());
                 prep.ItemToSell.setAmount((int)prep.Amount);
                 player.getInventory().addItem(prep.ItemToSell);
                 return null;

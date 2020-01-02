@@ -40,7 +40,6 @@ public class CreateAuctionGUI implements Listener {
                     return;
                 }
                 if (e.getSlot() < 4) { // all accept slots!
-                    System.out.println("ClickEventInSellInv");
                     e.setCancelled(true);
                     Player player = (Player) e.getWhoClicked();
                     boolean itemnull;
@@ -60,7 +59,7 @@ public class CreateAuctionGUI implements Listener {
                         itemnull = e.getView().getBottomInventory().getItem(e.getSlot()) != null;
                         slotis = e.getView().getBottomInventory().getItem(e.getSlot());
                     }
-                    if (itemnull) {
+                    if (itemnull && slotis != null) {
                         //blacklist check
                         for (String id : FileManager.Files.CONFIG.getFile().getStringList("Settings.BlackList")) {
                             if (slotis.getType() == Methods.makeItem(id, 1).getType()) {
@@ -72,7 +71,7 @@ public class CreateAuctionGUI implements Listener {
                         if (!FileManager.Files.CONFIG.getFile().getBoolean("Settings.Allow-Damaged-Items")) {
                             for (Material i : Methods.getDamageableItems()) {
                                 if (slotis.getType() == i) {
-                                    if (!slotis.getItemMeta().isUnbreakable()) {
+                                    if (slotis.hasItemMeta() && !slotis.getItemMeta().isUnbreakable()) {
                                         if (((Damageable) slotis).hasDamage()) {
                                             player.sendRawMessage(Messages.ITEM_DAMAGED.getMessage());
                                             return;
@@ -99,6 +98,7 @@ public class CreateAuctionGUI implements Listener {
                         Player player = (Player) e.getWhoClicked();
                         player.getInventory().addItem(returnItem);
                     }
+                    e.getWhoClicked().sendMessage(Messages.AUCTION_CREATE_CANCEL.getMessage());
                 }
             }
         }

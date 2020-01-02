@@ -25,7 +25,7 @@ public class PricePrompt extends StringPrompt {
             Player player = (Player) conversationContext.getForWhom();
             Number price = 0;
             if (message.equalsIgnoreCase("cancel")) {
-                player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                player.sendRawMessage(Messages.AUCTION_CREATE_CANCEL.getMessage());
                 prep.ItemToSell.setAmount((int)prep.Amount);
                 player.getInventory().addItem(prep.ItemToSell);
                 return null;
@@ -67,6 +67,6 @@ public class PricePrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext conversationContext) {
-        return "Zu welchem Preis soll das Item angeboten werden? (CANCEL zum abbrechen)"; //TODO: move to messages
+        return Messages.PRICE_PROMPT_MESSAGE.getMessage();
     }
 }

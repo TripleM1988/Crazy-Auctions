@@ -1,4 +1,8 @@
 Messages:
+  TypePromptMessage: '&f&lZum versteigern gib &2bid &f&, zum verkaufen &2sell &f&l, zum abbrechen &2cancel &f&l eingeben:'
+  PricePromptMessage: '&f&lPlease type the (starting-)price for the item:'
+  StartAuctionPromptMessage: '&f&lAre you sure you want to create the following: &b%auctiontype% &f&lof &b%auctionamount% %auctionitem% &f&lfor a price of &b%auctionprice%&f&l? Type &2yes &f&lto start or &2cancel &f&lto cancel.'
+  AuctionCreateCancel: '%eCancled creation!'
   Players-Only: '&cOnly players can use this command.'
   Reload: '&7You have just reloaded the Crazy Auctions Files.'
   Need-More-Money: '&cYou are in need of &a$%money_needed%&c.'
