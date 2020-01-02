@@ -5,7 +5,6 @@ import me.badbones69.crazyauctions.PlayerAuctionPrepare;
 import me.badbones69.crazyauctions.api.FileManager;
 import me.badbones69.crazyauctions.api.Messages;
 import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
@@ -27,6 +26,8 @@ public class PricePrompt extends StringPrompt {
             Number price = 0;
             if (message.equalsIgnoreCase("cancel")) {
                 player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                prep.ItemToSell.setAmount((int)prep.Amount);
+                player.getInventory().addItem(prep.ItemToSell);
                 return null;
             }
             else {
@@ -59,7 +60,7 @@ public class PricePrompt extends StringPrompt {
                 }
             }
             prep.Price = price;
-            return new AmountPrompt(prep);
+            return new StartAuctionPrompt(prep);
         }
         return null;
     }

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
+@Deprecated
 public class AmountPrompt extends StringPrompt {
 
     private PlayerAuctionPrepare prep;
@@ -23,7 +24,6 @@ public class AmountPrompt extends StringPrompt {
     public Prompt acceptInput(ConversationContext conversationContext, String message) {
         if(conversationContext.getForWhom() instanceof Player) {
             Player player = (Player) conversationContext.getForWhom();
-            Integer amountInHand = Methods.getItemInHand(player).getAmount();
 
             Number amount = 0;
             if (message.equalsIgnoreCase("cancel")) {
@@ -39,13 +39,6 @@ public class AmountPrompt extends StringPrompt {
                     return new AmountPrompt(prep);
                 }
                 amount = Integer.parseInt(message);
-            }
-
-            if(amount.intValue() > amountInHand) {
-                player.sendRawMessage("§4You do not have enough of this item!"); //TODO: move to messages
-                return new AmountPrompt(prep);
-            }
-            else {
                 prep.Amount = amount;
             }
             return new StartAuctionPrompt(prep); //TODO

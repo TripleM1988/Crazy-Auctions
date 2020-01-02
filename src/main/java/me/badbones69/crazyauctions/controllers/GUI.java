@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
+@SuppressWarnings("ALL")
 public class GUI implements Listener {
 	
 	private static HashMap<Player, Integer> bidding = new HashMap<>();
@@ -90,7 +91,8 @@ public class GUI implements Listener {
 		options.add("Refesh");
 		options.add("NextPage");
 		options.add("Category1");
-		options.add("Category2");
+//		options.add("Category2");
+        options.add("CreateAuction");
 		if(sell == ShopType.SELL) {
 			shopType.put(player, ShopType.SELL);
 			if(crazyAuctions.isBiddingEnabled()) {
@@ -609,13 +611,13 @@ public class GUI implements Listener {
 									playClick(player);
 									return;
 								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.WhatIsThis.SellingShop.Name")))) {
-									System.out.println("Clicked the book!");
-									playClick(player);
-									ConversationHelper.startConversation(player, Main.getMainInstance());
-									closeInv(player);
-									return;
-								}
+//								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.WhatIsThis.SellingShop.Name")))) {
+//									System.out.println("Clicked the book!");
+//									playClick(player);
+//									ConversationHelper.startConversation(player, Main.getMainInstance());
+//									closeInv(player);
+//									return;
+//								}
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Bidding/Selling.Selling.Name")))) {
 									openShop(player, ShopType.BID, shopCategory.get(player), 1);
 									playClick(player);
@@ -641,11 +643,42 @@ public class GUI implements Listener {
 									playClick(player);
 									return;
 								}
-								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
-									openCategories(player, shopType.get(player));
-									playClick(player);
-									return;
-								}
+//								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Category2.Name")))) {
+//									openCategories(player, shopType.get(player));
+//									playClick(player);
+//									return;
+//								}
+                                if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.CreateAuction.Name")))) {
+                                    playClick(player);
+									Inventory sellItemInv = Bukkit.createInventory(null, 9, Methods.color(config.getString("Settings.CreateGUIName")));
+									List<String> options = new ArrayList<>();
+									options.add("Confirm");
+									options.add("Cancel");
+									for(String o : options) {
+										String id = config.getString("Settings.GUISettings.OtherSettings." + o + ".Item");
+										String name = config.getString("Settings.GUISettings.OtherSettings." + o + ".Name");
+										ItemStack buttonItem;
+										if(config.contains("Settings.GUISettings.OtherSettings." + o + ".Lore")) {
+											buttonItem = Methods.makeItem(id, 1, name, config.getStringList("Settings.GUISettings.OtherSettings." + o + ".Lore"));
+										}else {
+											buttonItem = Methods.makeItem(id, 1, name);
+										}
+										if(o.equals("Confirm")) {
+											sellItemInv.setItem(0, buttonItem);
+											sellItemInv.setItem(1, buttonItem);
+											sellItemInv.setItem(2, buttonItem);
+											sellItemInv.setItem(3, buttonItem);
+										}
+										if(o.equals("Cancel")) {
+											sellItemInv.setItem(5, buttonItem);
+											sellItemInv.setItem(6, buttonItem);
+											sellItemInv.setItem(7, buttonItem);
+											sellItemInv.setItem(8, buttonItem);
+										}
+									}
+									e.getWhoClicked().openInventory(sellItemInv);
+                                    return;
+                                }
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.GUISettings.OtherSettings.Your-Item.Name")))) {
 									return;
 								}

@@ -1,6 +1,7 @@
 Settings:
   Prefix: '&7[&4Crazy &bAuctions&7]: ' #Prefix of when you get Crazy Auctions Messages.
   GUIName: '&4Crazy &bAuctions&8' #Name of the Main GUI.
+  CreateGUIName: ' &4Which item would you like to sell?' #Name of the Main GUI.
   Players-Current-Items: '&8Your Current Listings' #The Name of the Player Current Items GUI.
   Cancelled/Expired-Items: '&8Canceled/Expired Listings' #Name of the Cancelled/Expired GUI.
   Buying-Item: '&8Purchase Item: Are You Sure?' #Name of the Buying GUI.
@@ -163,15 +164,22 @@ Settings:
           - '&bCurrent Category: &6%category%'
           - '&aWant to see items in specific categories?'
           - '&aClick here to see all categories of items.'
-      Category2: #The button for Next Page.
-        Item: 'CHEST'
+#      Category2: #The button for Next Page.
+#        Item: 'CHEST'
+#        Toggle: true
+#        Slot: 48
+#        Name: '&6Categories'
+#        Lore:
+#          - '&bCurrent Category: &6%category%'
+#          - '&aWant to see items in specific categories?'
+#          - '&aClick here to see all categories of items.'
+      CreateAuction: #The button for Next Page.
+        Item: 'CLOCK'
         Toggle: true
         Slot: 48
-        Name: '&6Categories'
+        Name: '&6Create Auction'
         Lore:
-          - '&bCurrent Category: &6%category%'
-          - '&aWant to see items in specific categories?'
-          - '&aClick here to see all categories of items.'
+          - '&aClick here to sell items.'
       Bidding/Selling: #Switch between Bidding and Selling.
         Selling:
           Item: 'SLIME_BALL'

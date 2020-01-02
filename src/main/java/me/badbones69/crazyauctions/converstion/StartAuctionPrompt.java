@@ -7,8 +7,6 @@ import me.badbones69.crazyauctions.api.Messages;
 import me.badbones69.crazyauctions.api.ShopType;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.conversations.BooleanPrompt;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -47,12 +45,10 @@ public class StartAuctionPrompt extends StringPrompt {
             Player player = (Player) conversationContext.getForWhom();
             if (message.equalsIgnoreCase("cancel")) {
                 player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                prep.ItemToSell.setAmount((int)prep.Amount);
+                player.getInventory().addItem(prep.ItemToSell);
                 return null;
             } else if (message.equalsIgnoreCase("yes")) {
-                if(!Methods.getItemInHand(player).isSimilar(prep.ItemToSell)) {
-                    player.sendRawMessage("§4Du musst das zu verkaufende Item in der Hand halten!"); //TODO: move to messages
-                    return new StartAuctionPrompt(prep);
-                }
                 startAuction(player, prep);
             } else {
                 return new StartAuctionPrompt(prep);
@@ -102,11 +98,5 @@ public class StartAuctionPrompt extends StringPrompt {
         placeholders.put("%Price%", prep.Price + "");
         placeholders.put("%price%", prep.Price + "");
         player.sendRawMessage(Messages.ADDED_ITEM_TO_AUCTION.getMessage(placeholders));
-        if(prep.ItemToSell.getAmount() <= 1 || (prep.ItemToSell.getAmount() - prep.Amount.intValue()) <= 0) {
-            Methods.setItemInHand(player, new ItemStack(Material.AIR));
-        }else {
-            prep.ItemToSell.setAmount(prep.ItemToSell.getAmount() - prep.Amount.intValue());
-            Methods.setItemInHand(player, prep.ItemToSell);
-        }
     }
 }

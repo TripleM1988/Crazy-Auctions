@@ -85,6 +85,8 @@ public class TypePrompt extends StringPrompt {
                 prep.Type = "Sell";
             } else if (message.equals("cancel")) {
                 player.sendRawMessage("§eAuction cancled!"); //TODO: move to messages
+                prep.ItemToSell.setAmount((int)prep.Amount);
+                player.getInventory().addItem(prep.ItemToSell);
                 return null;
             } else {
                 return new TypePrompt(prep);

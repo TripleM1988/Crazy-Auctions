@@ -4,6 +4,7 @@ import me.badbones69.crazyauctions.api.*;
 import me.badbones69.crazyauctions.api.FileManager.Files;
 import me.badbones69.crazyauctions.api.events.AuctionListEvent;
 import me.badbones69.crazyauctions.command.SpawnCommand;
+import me.badbones69.crazyauctions.controllers.CreateAuctionGUI;
 import me.badbones69.crazyauctions.controllers.GUI;
 import me.badbones69.crazyauctions.controllers.Metrics;
 import me.badbones69.crazyauctions.currency.Vault;
@@ -39,6 +40,7 @@ public class Main extends JavaPlugin implements Listener {
 		crazyAuctions.loadCrazyAuctions();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new CreateAuctionGUI(), this);
 		Methods.updateAuction();
 		startCheck();
 		if(!Vault.setupEconomy()) {
